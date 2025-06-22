@@ -1,15 +1,73 @@
-// Step 1: Simulate User Behavior
-// - Add event listeners for button clicks and form submissions.
-// - Use JavaScript to dynamically update the DOM based on user actions.
+// index.js
 
-// Step 2: DOM Manipulation Functions
-// - Implement functions to add, update, and remove DOM elements.
-// - Ensure all elements are dynamically created with appropriate attributes and content.
+// Add text content to a container by ID
+function addElementToDOM(containerId, text) {
+  const container = document.getElementById(containerId);
+  if (container) {
+    container.textContent = text;
+  }
+}
 
-// Step 3: Error Handling
-// - Display error messages in the DOM for invalid inputs or missing elements.
-// - Create reusable functions to handle common error cases.
+// Remove an element by ID
+function removeElementFromDOM(elementId) {
+  const element = document.getElementById(elementId);
+  if (element && element.parentNode) {
+    element.parentNode.removeChild(element);
+  }
+}
 
-// Step 4: Reusable Utilities
-// - Create modular utility functions, such as createElement(tag, attributes).
-// - Ensure all functions follow DRY principles for maintainability.
+// Simulate a button click effect by updating container text
+function simulateClick(containerId, text) {
+  addElementToDOM(containerId, text);
+}
+
+// Handle form submission event
+function handleFormSubmit(formId, outputId) {
+  const form = document.getElementById(formId);
+  const output = document.getElementById(outputId);
+  const errorMessage = document.getElementById('error-message');
+
+  if (!form || !output || !errorMessage) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const input = form.querySelector('input[type="text"]');
+    const inputValue = input ? input.value.trim() : '';
+
+    if (inputValue === '') {
+      errorMessage.textContent = 'Input cannot be empty';
+      errorMessage.classList.remove('hidden');
+      output.textContent = '';
+    } else {
+      errorMessage.textContent = '';
+      errorMessage.classList.add('hidden');
+      output.textContent = inputValue;
+    }
+  });
+}
+
+// Initialize event listeners (call this on page load)
+function initializeApp() {
+  // Simulate click button event
+  const simulateBtn = document.getElementById('simulate-click');
+  if (simulateBtn) {
+    simulateBtn.addEventListener('click', () => {
+      simulateClick('dynamic-content', 'Button was clicked!');
+    });
+  }
+
+  // Setup form submit handler
+  handleFormSubmit('user-form', 'dynamic-content');
+}
+
+// Run initialization when DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+// Export functions for testing
+module.exports = {
+  addElementToDOM,
+  removeElementFromDOM,
+  simulateClick,
+  handleFormSubmit,
+};
